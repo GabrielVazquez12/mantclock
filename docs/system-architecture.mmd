@@ -1,0 +1,27 @@
+architecture-beta
+    group system(internet)[mantclock]
+
+    group aws(cloud)[AWS] in system
+
+    service movil(server)[Cliente Movil] in system
+    service web(server)[Cliente Web] in system
+
+    service alb(server)[Load Balancer ALB] in aws
+    service cdn(cloud)[CloudFront] in aws
+
+    service backend(server)[Backend ECS] in aws
+    service db(database)[Database RH RDS] in aws
+    service cloudmap(server)[Cloud Map] in aws
+    service recognize(cloud)[Serverless Rekognition] in aws
+
+
+    movil:B -- T:alb
+    web:B -- T:cdn
+
+
+    cdn:L -- R:alb
+    alb:B -- T:backend
+
+    backend:L -- R:db
+
+    backend:B -- T:recognize
